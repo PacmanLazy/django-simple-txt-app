@@ -1,0 +1,54 @@
+{% extends 'common/_base.html' %}
+{% load static %}
+
+{% block main %}
+<section class="post-list-section col-12 m-auto px-0 pb-2">
+    <div class="d-flex">
+        <form class="form-inline ml-auto" method="GET">
+            <div class="form-group mx-sm-3 mb-2">
+                {{form.post_filter_choice}}
+            </div>
+            <button type="submit" class="btn-sm mb-2">Filter</button>
+        </form>
+    </div>
+
+    {% for post in posts %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"><span class="fas fa-user"></span> {{post.author.username}}</h5>
+            <h6 class="card-subtitle text-muted my-1">{{post.post_text}}</h6>
+
+            <div class="post-imgs d-flex my-1">
+
+                <ol class="carousel-indicators list-inline position-static mx-0"></ol>
+                {% for attment in post.postattachment_set.all %}
+                <li class="list-inline-item">
+                    <a href="{{attment.attachment_img.url}}" target="_blank">
+                        <img src="{{attment.attachment_img.url}}" alt="woops" class="img-fluid">
+                    </a>
+                </li>
+                {% endfor %}
+                </ol>
+
+            </div>
+
+            <!-- post footer -->
+            <div class="d-flex mt-2">
+                <p class="mr-auto mb-0">
+                    <a href="#" class="card-link">All messages from <b><i>{{post.author.username}}</i></b></a>
+                </p>
+                <small class="post-date d-block mb-0">{{post.created}}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if is_paginated %}
+    {% include 'common/_pagination.html' %}
+    {% endif %}
+</section>
+{% endblock main %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static '/posts/css/post.css' %}">
+{% endblock custom_css %}

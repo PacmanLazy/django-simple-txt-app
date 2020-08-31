@@ -1,0 +1,61 @@
+:root {
+  --main-bg-color: #00c260;
+  --main-bg-alpha-color: rgba(39, 231, 135, .6);
+  --main-hover-color: #09df74;
+  --btn-text-color: #fff;
+}
+
+body {
+  background: url("../img/header_forest_bg.jpg") no-repeat fixed;
+}
+
+/* change the brand and text color */
+.my-navbar .navbar-brand,
+.my-navbar .navbar-text {
+  color: var(--main-bg-color);
+}
+/* change the link color */
+.my-navbar .navbar-nav .nav-link {
+  color: var(--main-bg-color);
+}
+/* change the color of active or hovered links */
+.my-navbar .nav-item.active .nav-link,
+.my-navbar .nav-item:hover .nav-link {
+  color: var(--main-hover-color);
+}
+
+.my-navbar {
+  background-color: rgba(241, 233, 233, 0.3);
+  border-bottom: 1px solid var(--main-bg-color);
+}
+
+.main-cont-bg {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.form-control:focus {
+  border-color: var(--main-hover-color);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px var(--main-bg-alpha-color);
+}
+
+.form-control {
+  border-color: var(--main-bg-alpha-color);
+}
+
+.btn, .btn-sm{
+  background-color: var(--main-bg-color);
+  color: var(--btn-text-color);
+}
+
+.btn:hover, .btn-sm:hover{
+    background-color: var(--main-hover-color);
+    color: var(--btn-text-color);
+}
+
+a {
+  color: var(--main-bg-color)!important;
+}
+
+a:hover {
+  color: var(--main-hover-color)!important;
+}

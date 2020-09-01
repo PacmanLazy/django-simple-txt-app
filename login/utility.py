@@ -1,3 +1,5 @@
-LOGIN_TEMPLATE = 'login/login_template.html'
+SIGNIN_TEMPLATE = 'login/login_template.html'
 SIGNUP_TEMPLATE = 'login/signup_template.html'
+SIGNUP_TITLE = 'Sign Up'
+SIGNIN_TITLE = 'Sign In'
 SIGNUP_SUCCESS_URL = '/posts/'

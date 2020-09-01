@@ -130,7 +130,12 @@ dmypy.json
 
 # -----------
 .vscode/
-DjangoTextingApp/settings/prod.py
+#DjangoTextingApp/settings/prod.py
+/staticfiles
 uploads/
 outer_cfg.txt
+app.yaml
+main.py
+requirements.txt
+.gcloudignore
 #------------

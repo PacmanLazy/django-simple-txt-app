@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from posts.models import Post, PostAttachment
 from posts.forms import PostCreateForm, PostFilterForm
-from posts.utility import POST_CREATE_VIEW, POST_LIST_VIEW, POST_VIEW_CONTEXT_NAME
+from posts.utility import POST_CREATE_VIEW, POST_LIST_VIEW, POST_VIEW_CONTEXT_NAME, POST_CREATE_TITLE, POST_LIST_TITLE
 
 # -------------
 # Create your views here.
@@ -20,6 +20,11 @@ class PostCreateView(FormView):
     form_class = PostCreateForm
     template_name = POST_CREATE_VIEW
     success_url = '/posts/'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostCreateView, self).get_context_data(*args, **kwargs)
+        context['title'] = POST_CREATE_TITLE
+        return context
 
     def form_valid(self, form):
         valid_response = super(PostCreateView, self).form_valid(form)
@@ -59,20 +64,11 @@ class PostListView(ListView, FormMixin):
         queryset = kwargs.pop('object_list', None)
         if queryset is None:
             filter = self.request.session.get('post_filter')
-
-            #requires refactoring
-            if filter:
-                if filter == 'oldest':
-                    self.object_list = self.model.oldest_posts()
-                elif filter == 'newwest':
-                    self.object_list = self.model.newwest_posts()
-                elif filter == 'lastday':
-                    self.object_list = self.model.lastday_posts()
-            else:
-                self.object_list = self.model.objects.all().order_by('-created')
-            #----------------------
-
+            self._filter_model_posts(filter)
+            
         context = super(PostListView, self).get_context_data(**kwargs)
+        context['title'] = POST_LIST_TITLE
+        
         return context
 
     def get(self, request, *args, **kwargs):
@@ -88,3 +84,19 @@ class PostListView(ListView, FormMixin):
         context = self.get_context_data(form=self.form)
 
         return self.render_to_response(context)
+
+    def _filter_model_posts(self, filter):
+        if filter:
+            if filter == 'oldest':
+                self.object_list = self.model.oldest_posts()
+                return self.object_list
+            elif filter == 'newwest':
+                self.object_list = self.model.newwest_posts()
+                return self.object_list
+            elif filter == 'lastday':
+                self.object_list = self.model.lastday_posts()
+                return self.object_list
+                
+        self.object_list = self.model.objects.all().order_by('-created')
+                    
+        return self.object_list

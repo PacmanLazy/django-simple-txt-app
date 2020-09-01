@@ -1,5 +1,9 @@
 {% extends 'common/_base.html' %}
 {% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock title %}
     
 {% block main %}
 <section class="post-create-section col-6 m-auto shadow p-4">
@@ -10,7 +14,7 @@
             {{ form.non_field_errors }}
         </small>
         <div class="form-group">
-            <label for="{{ form.post_text.id_for_label }}">Type your new post here</label>
+            <label for="{{ form.post_text.id_for_label }}">Post Text</label>
             {{ form.post_text }}
             <small class="text-danger">{{ form.post_text.errors }}</small>
         </div>

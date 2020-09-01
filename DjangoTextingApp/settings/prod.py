@@ -12,20 +12,28 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from DjangoTextingApp.utility import read_config_file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
+config = read_config_file()
+DB_name = config[0]
+user_name = config[1]
+Password = config[2]
+Host = config[3]
+Port = config[4]
+Secret_key = config[5]
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'db@vn@ga)8b)l3yio$&2@&l)+@$ougtot&$xj&h$1lq41en6ud'
+SECRET_KEY = Secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.107.104.210']
 
 
 # Application definition
@@ -53,6 +61,7 @@ MEDIA_URL = '/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +70,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+ROOT_URLCONF = 'DjangoTextingApp.urls'
 
 TEMPLATES = [
     {
@@ -85,16 +96,20 @@ WSGI_APPLICATION = 'DjangoTextingApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_name,
+        'USER': user_name,
+        'PASSWORD': Password,
+        'HOST': Host,
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+    # Password validation
+    # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     # {
@@ -135,3 +150,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'uploads'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+

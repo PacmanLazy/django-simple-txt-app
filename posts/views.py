@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, FormView, FormMixin
 from django.views.generic import ListView
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib.auth.mixins import LoginRequiredMixin
 from posts.models import Post, PostAttachment
 from posts.forms import PostCreateForm, PostFilterForm
 from posts.utility import POST_CREATE_VIEW, POST_LIST_VIEW, POST_VIEW_CONTEXT_NAME, POST_CREATE_TITLE, POST_LIST_TITLE
@@ -9,14 +9,7 @@ from posts.utility import POST_CREATE_VIEW, POST_LIST_VIEW, POST_VIEW_CONTEXT_NA
 # -------------
 # Create your views here.
 
-# test_view, requires refactoring
-
-
-def posts_view(request):
-    return render(request, 'posts/_posts_base.html')
-
-
-class PostCreateView(FormView):
+class PostCreateView(LoginRequiredMixin, FormView):
     form_class = PostCreateForm
     template_name = POST_CREATE_VIEW
     success_url = '/posts/'
@@ -50,7 +43,7 @@ class PostCreateView(FormView):
             PostAttachment.save(img_attachment)
 
 
-class PostListView(ListView, FormMixin):
+class PostListView(LoginRequiredMixin, ListView, FormMixin):
     form_class = PostFilterForm
     model = Post
     template_name = POST_LIST_VIEW
@@ -62,6 +55,7 @@ class PostListView(ListView, FormMixin):
 
     def get_context_data(self, **kwargs):
         queryset = kwargs.pop('object_list', None)
+        
         if queryset is None:
             filter = self.request.session.get('post_filter')
             self._filter_model_posts(filter)
@@ -95,6 +89,9 @@ class PostListView(ListView, FormMixin):
                 return self.object_list
             elif filter == 'lastday':
                 self.object_list = self.model.lastday_posts()
+                return self.object_list
+            else:
+                self.object_list = self.model.all_user_posts(filter)
                 return self.object_list
                 
         self.object_list = self.model.objects.all().order_by('-created')

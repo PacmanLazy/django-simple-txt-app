@@ -2,8 +2,7 @@ import os
 from django.utils.text import slugify
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
-from datetime import datetime, timedelta, time
+from django.utils.timezone import now, timedelta
 from common.utility import UPLOADS_DIR
 
 # Create your models here.
@@ -22,8 +21,12 @@ class Post(models.Model):
     
     @classmethod
     def lastday_posts(cls):
-        yesterday = datetime.now() - timedelta(days=1)
-        return cls.objects.all().order_by('-created').filter(created__gte = yesterday)
+        yesterday = now() - timedelta(days=1)
+        return cls.objects.all().filter(created__gte = yesterday).order_by('-created')
+
+    @classmethod
+    def all_user_posts(cls, user):
+        return cls.objects.all().filter(author__username=user).order_by("-created")
 
     def __str__(self):
         return str(('{} {}'.format(self.author.username, self.created)))

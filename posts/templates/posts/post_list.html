@@ -39,7 +39,7 @@
             <!-- post footer -->
             <div class="d-flex mt-2">
                 <p class="mr-auto mb-0">
-                    <a href="#" class="card-link">All messages from <b><i>{{post.author.username}}</i></b></a>
+                    <a href="{% url 'posts' %}?post_filter_choice={{post.author.username}}" class="card-link">All messages from <b><i>{{post.author.username}}</i></b></a>
                 </p>
                 <small class="post-date d-block mb-0">{{post.created}}</small>
             </div>
